@@ -7,16 +7,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lankasmartmart.databinding.ItemCartBinding;
 import com.example.lankasmartmart.model.CartItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
     private List<CartItem> cartItems;
-    private Runnable onCartUpdated;
+    private Runnable updateTotalCallback;
 
-    public CartAdapter(List<CartItem> cartItems, Runnable onCartUpdated) {
-        this.cartItems = cartItems;
-        this.onCartUpdated = onCartUpdated;
+    public CartAdapter(List<CartItem> cartItems, Runnable updateTotalCallback) {
+        this.cartItems = cartItems != null ? cartItems : new ArrayList<>();
+        this.updateTotalCallback = updateTotalCallback;
+    }
+
+    public void updateItems(List<CartItem> newItems) {
+        this.cartItems = newItems != null ? newItems : new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -44,12 +50,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             this.binding = binding;
         }
 
-        public void bind(CartItem cartItem) {
-            binding.tvProductName.setText(cartItem.getProduct().getName());
-            binding.tvProductPrice.setText(String.format("Rs. %.2f", cartItem.getProduct().getPrice()));
-            binding.tvQuantity.setText("Qty: " + cartItem.getQuantity());
-            binding.imgProduct.setImageResource(cartItem.getProduct().getImageResourceId());
-            binding.tvTotalItemPrice.setText(String.format("Rs. %.2f", cartItem.getTotalPrice()));
+        public void bind(CartItem item) {
+            binding.tvProductName.setText(item.getProduct().getName());
+            binding.tvProductPrice.setText(String.format("Rs. %.2f", item.getProduct().getPrice()));
+            binding.tvQuantity.setText(String.valueOf(item.getQuantity()));
+            binding.imgProduct.setImageResource(item.getProduct().getImageResourceId());
+
+            // Disable buttons for now since Room handles updates via DataRepository
+            // separately
+            // To be fully reactive, these plus/minus buttons should call
+            // DataRepository.updateCart()
         }
     }
 }

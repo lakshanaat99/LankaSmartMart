@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "622764023792",
+    "project_id": "lankasmart-217c6",
+    "storage_bucket": "lankasmart-217c6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622764023792:android:02b3ebc3c7348165708735",
+        "android_client_info": {
+          "package_name": "com.example.lankasmartmart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvV72J62ZzthErfPvXK809PeCuwGLLgLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
