@@ -12,13 +12,13 @@ public class CachedCategoryEntity {
     private String categoryId;
 
     private String name;
-    private String imageUrl;
+    private String iconUrl;
     private long lastUpdated;
 
-    public CachedCategoryEntity(@NonNull String categoryId, String name, String imageUrl, long lastUpdated) {
+    public CachedCategoryEntity(@NonNull String categoryId, String name, String iconUrl, long lastUpdated) {
         this.categoryId = categoryId;
         this.name = name;
-        this.imageUrl = imageUrl;
+        this.iconUrl = iconUrl;
         this.lastUpdated = lastUpdated;
     }
 
@@ -39,12 +39,12 @@ public class CachedCategoryEntity {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getIconUrl() {
+        return iconUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
     }
 
     public long getLastUpdated() {

@@ -5,42 +5,41 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.example.lankasmartmart.databinding.ItemProductCardBinding;
+import com.example.lankasmartmart.databinding.ItemProductCardSmallBinding;
 import com.example.lankasmartmart.model.Product;
 
+import java.util.Collections;
 import java.util.List;
 
-public class ProductFeedAdapter extends RecyclerView.Adapter<ProductFeedAdapter.ProductViewHolder> {
+public class RecentProductAdapter extends RecyclerView.Adapter<RecentProductAdapter.RecentViewHolder> {
 
     private List<Product> products;
     private OnItemClickListener listener;
-    private OnAddToCartClickListener cartListener;
 
     public interface OnItemClickListener {
         void onItemClick(Product product);
     }
 
-    public interface OnAddToCartClickListener {
-        void onAddToCartClick(Product product);
+    public RecentProductAdapter(List<Product> products, OnItemClickListener listener) {
+        this.products = products != null ? products : Collections.emptyList();
+        this.listener = listener;
     }
 
-    public ProductFeedAdapter(List<Product> products, OnItemClickListener listener,
-            OnAddToCartClickListener cartListener) {
-        this.products = products;
-        this.listener = listener;
-        this.cartListener = cartListener;
+    public void updateItems(List<Product> newProducts) {
+        this.products = newProducts != null ? newProducts : Collections.emptyList();
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemProductCardBinding binding = ItemProductCardBinding.inflate(LayoutInflater.from(parent.getContext()),
-                parent, false);
-        return new ProductViewHolder(binding);
+    public RecentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ItemProductCardSmallBinding binding = ItemProductCardSmallBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false);
+        return new RecentViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecentViewHolder holder, int position) {
         holder.bind(products.get(position));
     }
 
@@ -49,17 +48,17 @@ public class ProductFeedAdapter extends RecyclerView.Adapter<ProductFeedAdapter.
         return products.size();
     }
 
-    class ProductViewHolder extends RecyclerView.ViewHolder {
-        private ItemProductCardBinding binding;
+    class RecentViewHolder extends RecyclerView.ViewHolder {
+        private ItemProductCardSmallBinding binding;
 
-        public ProductViewHolder(ItemProductCardBinding binding) {
+        public RecentViewHolder(ItemProductCardSmallBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
         public void bind(Product product) {
             binding.tvProductName.setText(product.getName());
-            binding.tvProductPrice.setText(String.format("Rs. %.2f", product.getPrice()));
+            binding.tvProductPrice.setText(String.format("Rs. %.0f", product.getPrice()));
 
             String imageUrl = product.getImageUrl();
             if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -71,10 +70,6 @@ public class ProductFeedAdapter extends RecyclerView.Adapter<ProductFeedAdapter.
             }
 
             binding.getRoot().setOnClickListener(v -> listener.onItemClick(product));
-
-            if (binding.btnAddCart != null) {
-                binding.btnAddCart.setOnClickListener(v -> cartListener.onAddToCartClick(product));
-            }
         }
     }
 }

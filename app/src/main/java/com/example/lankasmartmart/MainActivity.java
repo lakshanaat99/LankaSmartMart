@@ -1,8 +1,10 @@
 package com.example.lankasmartmart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import com.example.lankasmartmart.auth.AuthManager;
 import com.example.lankasmartmart.databinding.ActivityMainBinding;
 import com.example.lankasmartmart.fragment.CartFragment;
 import com.example.lankasmartmart.fragment.HomeFragment;
@@ -11,10 +13,24 @@ import com.example.lankasmartmart.fragment.ProfileFragment;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private AuthManager authManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        authManager = AuthManager.getInstance(this);
+        
+        // Check if user is authenticated
+        if (!authManager.isUserLoggedIn()) {
+            // Redirect to login if not authenticated
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+        
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

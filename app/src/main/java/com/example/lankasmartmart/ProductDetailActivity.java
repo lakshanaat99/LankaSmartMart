@@ -3,6 +3,7 @@ package com.example.lankasmartmart;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.bumptech.glide.Glide;
 import com.example.lankasmartmart.data.DataRepository;
 import com.example.lankasmartmart.databinding.ActivityProductDetailBinding;
 import com.example.lankasmartmart.model.Product;
@@ -27,6 +28,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if (product != null) {
                     this.product = product;
                     bindProductData();
+                    repository.addToRecentlyViewed(product);
                 } else {
                     Toast.makeText(this, "Product not found", Toast.LENGTH_SHORT).show();
                     finish();
@@ -65,7 +67,28 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.tvProductName.setText(product.getName());
         binding.tvProductPrice.setText(String.format("Rs. %.2f", product.getPrice()));
         binding.tvDescription.setText(product.getDescription());
-        binding.imgProduct.setImageResource(product.getImageResourceId());
+
+        if (product.isAvailable()) {
+            binding.tvAvailability.setText("In Stock");
+            binding.tvAvailability.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+            binding.btnAddToCart.setEnabled(true);
+            binding.btnAddToCart.setAlpha(1.0f);
+        } else {
+            binding.tvAvailability.setText("Out of Stock");
+            binding.tvAvailability.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            binding.btnAddToCart.setEnabled(false);
+            binding.btnAddToCart.setAlpha(0.5f);
+        }
+
+        String imageUrl = product.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(imageUrl)
+                    .into(binding.imgProduct);
+        } else {
+            binding.imgProduct.setImageResource(android.R.drawable.ic_menu_report_image);
+        }
+
         updateQuantity();
     }
 

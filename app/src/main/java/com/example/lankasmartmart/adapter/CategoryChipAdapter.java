@@ -51,7 +51,6 @@ public class CategoryChipAdapter extends RecyclerView.Adapter<CategoryChipAdapte
 
         public void bind(Category category) {
             binding.tvCategoryName.setText(category.getName());
-            // Icon binding removed to match new text-only layout
             binding.getRoot().setOnClickListener(v -> listener.onItemClick(category));
         }
     }

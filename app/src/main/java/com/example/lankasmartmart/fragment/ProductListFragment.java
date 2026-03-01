@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.lankasmartmart.ProductDetailActivity;
 import com.example.lankasmartmart.R;
+import android.widget.Toast;
 import com.example.lankasmartmart.adapter.ProductFeedAdapter;
 import com.example.lankasmartmart.data.DataRepository;
 import com.example.lankasmartmart.databinding.FragmentProductListBinding;
@@ -61,6 +62,9 @@ public class ProductListFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ProductDetailActivity.class);
                 intent.putExtra("PRODUCT_ID", product.getId());
                 startActivity(intent);
+            }, product -> {
+                repository.addToCart(product, 1);
+                Toast.makeText(getContext(), product.getName() + " added to Cart", Toast.LENGTH_SHORT).show();
             }));
         });
     }

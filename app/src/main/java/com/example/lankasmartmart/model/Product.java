@@ -9,17 +9,23 @@ public class Product implements Parcelable {
     private String name;
     private String description;
     private double price;
-    @DrawableRes
-    private int imageResourceId;
+    private String imageUrl;
     private int categoryId;
+    private boolean isAvailable;
 
-    public Product(int id, String name, String description, double price, int imageResourceId, int categoryId) {
+    public Product() {
+        // Required empty constructor for Firestore parsing
+    }
+
+    public Product(int id, String name, String description, double price, String imageUrl, int categoryId,
+            boolean isAvailable) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.imageResourceId = imageResourceId;
+        this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+        this.isAvailable = isAvailable;
     }
 
     protected Product(Parcel in) {
@@ -27,8 +33,9 @@ public class Product implements Parcelable {
         name = in.readString();
         description = in.readString();
         price = in.readDouble();
-        imageResourceId = in.readInt();
+        imageUrl = in.readString();
         categoryId = in.readInt();
+        isAvailable = in.readByte() != 0;
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -54,8 +61,9 @@ public class Product implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
         dest.writeDouble(price);
-        dest.writeInt(imageResourceId);
+        dest.writeString(imageUrl);
         dest.writeInt(categoryId);
+        dest.writeByte((byte) (isAvailable ? 1 : 0));
     }
 
     public int getId() {
@@ -74,11 +82,15 @@ public class Product implements Parcelable {
         return price;
     }
 
-    public int getImageResourceId() {
-        return imageResourceId;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public int getCategoryId() {
         return categoryId;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
     }
 }

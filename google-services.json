@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "622764023792",
+    "project_id": "lankasmart-217c6",
+    "storage_bucket": "lankasmart-217c6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622764023792:android:02b3ebc3c7348165708735",
+        "android_client_info": {
+          "package_name": "com.example.lankasmartmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "622764023792-505cmtv0r13mds8nef913dts6j9d06bm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lankasmartmart",
+            "certificate_hash": "85cebdcd663f2381fbdbf59e7e1bc1dc2b415c91"
+          }
+        },
+        {
+          "client_id": "622764023792-0o03k4r97n2c551kqljfktmpdf4u3lo9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvV72J62ZzthErfPvXK809PeCuwGLLgLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "622764023792-0o03k4r97n2c551kqljfktmpdf4u3lo9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -35,6 +35,9 @@ public class CartFragment extends Fragment {
 
         binding.recyclerViewCart.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CartAdapter(new ArrayList<>(), () -> {
+        }, item -> {
+            DataRepository.getInstance(requireContext()).removeFromCart(item.getProduct());
+            Toast.makeText(getContext(), "Item removed", Toast.LENGTH_SHORT).show();
         });
         binding.recyclerViewCart.setAdapter(adapter);
 
@@ -48,8 +51,13 @@ public class CartFragment extends Fragment {
                 if (cartItems.isEmpty()) {
                     Toast.makeText(getContext(), "Cart is empty!", Toast.LENGTH_SHORT).show();
                 } else {
-                    repository.clearCart();
-                    Toast.makeText(getContext(), "Order Confirmed!", Toast.LENGTH_LONG).show();
+                    double total = 0;
+                    for (CartItem item : cartItems)
+                        total += item.getTotalPrice();
+
+                    repository.placeOrder(cartItems, total, "user_123", () -> {
+                        Toast.makeText(getContext(), "Order Confirmed!", Toast.LENGTH_LONG).show();
+                    });
                 }
             });
         });
