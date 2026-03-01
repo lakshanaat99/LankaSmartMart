@@ -5,13 +5,16 @@ import androidx.annotation.DrawableRes;
 public class Category {
     private int id;
     private String name;
-    @DrawableRes
-    private int iconResourceId;
+    private String iconUrl;
 
-    public Category(int id, String name, int iconResourceId) {
+    public Category() {
+        // Required empty constructor for Firestore parsing
+    }
+
+    public Category(int id, String name, String iconUrl) {
         this.id = id;
         this.name = name;
-        this.iconResourceId = iconResourceId;
+        this.iconUrl = iconUrl;
     }
 
     public int getId() {
@@ -22,7 +25,7 @@ public class Category {
         return name;
     }
 
-    public int getIconResourceId() {
-        return iconResourceId;
+    public String getIconUrl() {
+        return iconUrl;
     }
 }

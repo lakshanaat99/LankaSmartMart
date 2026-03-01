@@ -15,6 +15,7 @@
         android:elevation="4dp">
 
         <ImageView
+            android:id="@+id/ivProfileImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/user"
@@ -67,25 +68,19 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Order History"
+            android:text="Recent Orders"
             android:padding="16dp"
             android:background="#FFFFFF"
             android:textSize="16sp"
+            android:textStyle="bold"
             android:textColor="#333333"/>
-            
-        <View
-             android:layout_width="match_parent"
-             android:layout_height="1dp"
-             android:background="#EEEEEE"/>
 
-        <TextView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewOrders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Help &amp; Support"
-            android:padding="16dp"
-            android:background="#FFFFFF"
-            android:textSize="16sp"
-            android:textColor="#333333"/>
+            android:padding="8dp"
+            android:clipToPadding="false"/>
 
     </LinearLayout>
 

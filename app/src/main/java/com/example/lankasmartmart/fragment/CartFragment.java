@@ -10,8 +10,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.lankasmartmart.adapter.CartAdapter;
-import com.example.lankasmartmart.data.MockDataProvider;
+import com.example.lankasmartmart.data.DataRepository;
 import com.example.lankasmartmart.databinding.FragmentCartBinding;
+import com.example.lankasmartmart.model.CartItem;
+
+import java.util.ArrayList;
 
 public class CartFragment extends Fragment {
 
@@ -31,25 +34,42 @@ public class CartFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.recyclerViewCart.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CartAdapter(MockDataProvider.getCart(), this::updateTotal);
+        adapter = new CartAdapter(new ArrayList<>(), () -> {
+        }, item -> {
+            DataRepository.getInstance(requireContext()).removeFromCart(item.getProduct());
+            Toast.makeText(getContext(), "Item removed", Toast.LENGTH_SHORT).show();
+        });
         binding.recyclerViewCart.setAdapter(adapter);
 
-        updateTotal();
+        DataRepository repository = DataRepository.getInstance(requireContext());
 
-        binding.btnCheckout.setOnClickListener(v -> {
-            if (MockDataProvider.getCart().isEmpty()) {
-                Toast.makeText(getContext(), "Cart is empty!", Toast.LENGTH_SHORT).show();
-            } else {
-                MockDataProvider.clearCart();
-                adapter.notifyDataSetChanged();
-                updateTotal();
-                Toast.makeText(getContext(), "Order Confirmed!", Toast.LENGTH_LONG).show();
-            }
+        repository.getCartItems().observe(getViewLifecycleOwner(), cartItems -> {
+            adapter.updateItems(cartItems);
+            updateTotal(cartItems);
+
+            binding.btnCheckout.setOnClickListener(v -> {
+                if (cartItems.isEmpty()) {
+                    Toast.makeText(getContext(), "Cart is empty!", Toast.LENGTH_SHORT).show();
+                } else {
+                    double total = 0;
+                    for (CartItem item : cartItems)
+                        total += item.getTotalPrice();
+
+                    repository.placeOrder(cartItems, total, "user_123", () -> {
+                        Toast.makeText(getContext(), "Order Confirmed!", Toast.LENGTH_LONG).show();
+                    });
+                }
+            });
         });
     }
 
-    private void updateTotal() {
-        double total = MockDataProvider.getCartTotal();
+    private void updateTotal(java.util.List<CartItem> items) {
+        double total = 0;
+        if (items != null) {
+            for (CartItem item : items) {
+                total += item.getTotalPrice();
+            }
+        }
         binding.tvTotalAmount.setText(String.format("Rs. %.2f", total));
         binding.tvSubtotalAmount.setText(String.format("Rs. %.2f", total));
     }

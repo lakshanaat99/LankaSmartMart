@@ -99,6 +99,34 @@
 
             </androidx.cardview.widget.CardView>
 
+            <!-- Recently Viewed Section -->
+            <LinearLayout
+                android:id="@+id/layoutRecentlyViewed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recently Viewed"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewRecent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:clipToPadding="false"
+                    tools:listitem="@layout/item_product_card_small"/>
+            </LinearLayout>
+
             <!-- Categories -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewCategories"
