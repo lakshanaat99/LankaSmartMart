@@ -22,4 +22,11 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <!-- Splash Screen Theme -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primaryGreen</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.LankaSmartMart</item>
+    </style>
 </resources>

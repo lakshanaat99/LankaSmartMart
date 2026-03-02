@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash Screen Theme for Android 12+ -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Background Color -->
+        <item name="windowSplashScreenBackground">@color/primaryGreen</item>
+        <!-- Icon: White background with centered logo -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <!-- Branding Image: Pinned to the bottom of the screen (Android 12+ only) -->
+        <item name="android:windowSplashScreenBrandingImage">@drawable/logotext</item>
+        <!-- Theme to transition to after splash -->
+        <item name="postSplashScreenTheme">@style/Theme.LankaSmartMart</item>
+    </style>
+</resources>

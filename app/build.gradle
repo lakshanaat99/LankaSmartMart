@@ -61,4 +61,10 @@ dependencies {
 
     // WorkManager
     implementation libs.work.runtime
+
+    // ML Kit Barcode Scanning
+    implementation libs.barcode.scanning
+
+    // Splash Screen API (Android 12+)
+    implementation libs.core.splashscreen
 }
