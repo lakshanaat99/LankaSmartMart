@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">LankaSmartMart</string>
     <!-- Replace with your Web Client ID from Firebase Console > Project Settings > OAuth 2.0 Client IDs -->
-    <string name="default_web_client_id">YOUR_WEB_CLIENT_ID_HERE</string>
+    <string name="default_web_client_id">622764023792-0o03k4r97n2c551kqljfktmpdf4u3lo9.apps.googleusercontent.com</string>
 </resources>
