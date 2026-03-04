@@ -12,20 +12,24 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Handle the splash screen transition.
+        // This is the new Android 12+ way to show a splash screen while the app loads
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
 
-        // Navigate immediately to the main content
+        // Get our AuthManager to check if we know this user
         AuthManager authManager = AuthManager.getInstance(this);
 
         Intent intent;
+        // If they are logged in, take them straight to the Main app screen
         if (authManager.isUserLoggedIn()) {
             intent = new Intent(SplashActivity.this, MainActivity.class);
         } else {
+            // Otherwise, they need to log in first!
             intent = new Intent(SplashActivity.this, LoginActivity.class);
         }
         startActivity(intent);
+
+        // Close the splash screen so they can't go back to it
         finish();
     }
 }

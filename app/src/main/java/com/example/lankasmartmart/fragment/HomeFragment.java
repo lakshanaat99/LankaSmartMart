@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.lankasmartmart.ProductDetailActivity;
 import com.example.lankasmartmart.R;
-import com.example.lankasmartmart.R;
 import android.widget.Toast;
 import com.example.lankasmartmart.adapter.CategoryChipAdapter;
 import com.example.lankasmartmart.adapter.ProductFeedAdapter;
@@ -33,7 +32,6 @@ import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 import java.io.IOException;
 import java.util.List;
-import com.example.lankasmartmart.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment implements SensorEventListener {
 

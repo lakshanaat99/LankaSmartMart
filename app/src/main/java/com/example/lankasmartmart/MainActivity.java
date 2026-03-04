@@ -20,6 +20,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
 
+    // These variables link our code to the design and manage login
     private ActivityMainBinding binding;
     private AuthManager authManager;
 
@@ -32,12 +33,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Connect this code to the activity_main.xml design file
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+
         authManager = AuthManager.getInstance(this);
 
-        // Request needed permissions
+        // Ask the user for permission to use the camera and send notifications when the
+        // app opens
         requestNeededPermissions();
 
-        // Fetch and log FCM token
+        // Get the special device token for push notifications and print it out
+        // We need this token to test notifications in the Firebase console
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -49,22 +55,24 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("========== FCM Registration Token: " + token + " ==========");
                 });
 
-        // Check if user is authenticated
+        // Check if the user is logged in
+        // If they are not logged in, kick them out to the Login screen
         if (!authManager.isUserLoggedIn()) {
-            // Redirect to login if not authenticated
             Intent intent = new Intent(this, LoginActivity.class);
+            // This flag makes sure they cant press back to return here
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
             return;
         }
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        // Set up the screen using our layout file
         setContentView(binding.getRoot());
 
-        // Set default fragment
+        // Show the Home screen automatically when the app starts
         loadFragment(new HomeFragment());
 
+        // Listen for clicks on the bottom navigation bar
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             Fragment fragment = null;
             if (item.getItemId() == R.id.nav_home) {
@@ -78,10 +86,11 @@ public class MainActivity extends AppCompatActivity {
             if (fragment != null) {
                 loadFragment(fragment);
             }
-            return true;
+            return true; // Return true to show the button was clicked
         });
     }
 
+    // A helper method to change the screen content without opening a new activity
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
@@ -112,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!permissionsToRequest.isEmpty()) {
+            // Actually ask the user using the system popup window
             permissionLauncher.launch(permissionsToRequest.toArray(new String[0]));
         }
     }

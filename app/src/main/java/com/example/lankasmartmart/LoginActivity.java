@@ -14,13 +14,18 @@ import android.util.Log;
 
 public class LoginActivity extends AppCompatActivity {
 
+    // View binding holds references to our UI (buttons, text fields)
     private ActivityLoginBinding binding;
+
+    // AuthManager handles talking to Firebase for login/signup
     private AuthManager authManager;
     private static final int RC_SIGN_IN = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Connect this code to the activity_login.xml design file
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -39,17 +44,19 @@ public class LoginActivity extends AppCompatActivity {
                     System.out.println("========== FCM Registration Token: " + token + " ==========");
                 });
 
-        // Check if user is already logged in
+        // Check if user is already logged in from a previous session
+        // If they are, skip login and go straight to the Home screen
         if (authManager.isUserLoggedIn()) {
             navigateToMain();
             return;
         }
 
+        // What happens when the user clicks the "Log In" button
         binding.btnLogin.setOnClickListener(v -> {
             String email = binding.etEmail.getText().toString().trim();
             String password = binding.etPassword.getText().toString();
 
-            // Validate inputs
+            // Validate inputs to make sure they didn't leave anything blank
             if (TextUtils.isEmpty(email)) {
                 binding.etEmail.setError("Email is required");
                 binding.etEmail.requestFocus();
@@ -68,11 +75,12 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            binding.progressBar.setVisibility(View.VISIBLE);
-            binding.btnLogin.setEnabled(false);
+            binding.progressBar.setVisibility(View.VISIBLE); // Show loading spinner
+            binding.btnLogin.setEnabled(false); // Disable button to prevent double-clicks
             binding.etEmail.setError(null);
             binding.etPassword.setError(null);
 
+            // Ask AuthManager to try logging in with Firebase
             authManager.signInWithEmailPassword(email, password, new AuthManager.OnAuthCompleteListener() {
                 @Override
                 public void onSuccess(FirebaseUser user) {
@@ -115,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             });
         });
 
+        // What happens when the user clicks "Sign Up" instead
         binding.tvSignup.setOnClickListener(v -> {
             Intent intent = new Intent(this, SignupActivity.class);
             startActivity(intent);
@@ -180,8 +189,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // A helper method to switch to the Main application screen
     private void navigateToMain() {
         Intent intent = new Intent(this, MainActivity.class);
+        // Clear history so the user can't press 'back' to return to Login
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

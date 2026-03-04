@@ -12,8 +12,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
 
+    // These variables connect our code to the user interface
     private ActivitySignupBinding binding;
-    private AuthManager authManager;
+    private AuthManager authManager; // Helps us create accounts
     private static final int RC_SIGN_IN = 9001;
 
     @Override
@@ -24,12 +25,14 @@ public class SignupActivity extends AppCompatActivity {
 
         authManager = AuthManager.getInstance(this);
 
-        // Check if user is already logged in
+        // Check if user is already logged in securely
+        // We don't want logged-in users to see the signup screen
         if (authManager.isUserLoggedIn()) {
             navigateToMain();
             return;
         }
 
+        // What happens when the user clicks the "Sign Up" button
         binding.btnSignup.setOnClickListener(v -> {
             String username = binding.etUsername.getText().toString().trim();
             String name = binding.etName.getText().toString().trim();
@@ -37,10 +40,10 @@ public class SignupActivity extends AppCompatActivity {
             String password = binding.etPassword.getText().toString();
             String confirmPassword = binding.etConfirmPassword.getText().toString();
 
-            // Clear previous errors
+            // Clear out any old error messages from before
             clearErrors();
 
-            // Validate inputs
+            // We use this flag to check if everything the user typed is okay
             boolean isValid = true;
 
             if (TextUtils.isEmpty(username)) {
@@ -109,61 +112,66 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
 
+            // If any of the checks above failed (like a missing password), stop here!
             if (!isValid) {
                 return;
             }
 
+            // Show a little spinning loading icon and freeze the button
             binding.progressBar.setVisibility(View.VISIBLE);
             binding.btnSignup.setEnabled(false);
 
-            authManager.signUpWithEmailPassword(username, name, email, password, 
-                new AuthManager.OnAuthCompleteListener() {
-                @Override
-                public void onSuccess(FirebaseUser user) {
-                    binding.progressBar.setVisibility(View.GONE);
-                    binding.btnSignup.setEnabled(true);
-                    Toast.makeText(SignupActivity.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
-                    navigateToMain();
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    binding.progressBar.setVisibility(View.GONE);
-                    binding.btnSignup.setEnabled(true);
-                    String errorMessage = "Sign up failed";
-                    if (e.getMessage() != null) {
-                        if (e.getMessage().contains("invalid-email")) {
-                            errorMessage = "Invalid email address";
-                            binding.etEmail.setError(errorMessage);
-                            binding.etEmail.requestFocus();
-                        } else if (e.getMessage().contains("email-already-in-use")) {
-                            errorMessage = "An account with this email already exists";
-                            binding.etEmail.setError(errorMessage);
-                            binding.etEmail.requestFocus();
-                        } else if (e.getMessage().contains("weak-password")) {
-                            errorMessage = "Password is too weak";
-                            binding.etPassword.setError(errorMessage);
-                            binding.etPassword.requestFocus();
-                        } else if (e.getMessage().contains("network")) {
-                            errorMessage = "Network error. Please check your connection";
-                        } else if (e.getMessage().contains("Username is already taken")) {
-                            binding.etUsername.setError(e.getMessage());
-                            binding.etUsername.requestFocus();
-                            errorMessage = e.getMessage();
-                        } else {
-                            errorMessage = e.getMessage();
+            // Finally, tell Firebase to create the new account
+            authManager.signUpWithEmailPassword(username, name, email, password,
+                    new AuthManager.OnAuthCompleteListener() {
+                        @Override
+                        public void onSuccess(FirebaseUser user) {
+                            binding.progressBar.setVisibility(View.GONE);
+                            binding.btnSignup.setEnabled(true);
+                            Toast.makeText(SignupActivity.this, "Account Created Successfully", Toast.LENGTH_SHORT)
+                                    .show();
+                            navigateToMain();
                         }
-                    }
-                    Toast.makeText(SignupActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                }
-            });
+
+                        @Override
+                        public void onError(Exception e) {
+                            binding.progressBar.setVisibility(View.GONE);
+                            binding.btnSignup.setEnabled(true);
+                            String errorMessage = "Sign up failed";
+                            if (e.getMessage() != null) {
+                                if (e.getMessage().contains("invalid-email")) {
+                                    errorMessage = "Invalid email address";
+                                    binding.etEmail.setError(errorMessage);
+                                    binding.etEmail.requestFocus();
+                                } else if (e.getMessage().contains("email-already-in-use")) {
+                                    errorMessage = "An account with this email already exists";
+                                    binding.etEmail.setError(errorMessage);
+                                    binding.etEmail.requestFocus();
+                                } else if (e.getMessage().contains("weak-password")) {
+                                    errorMessage = "Password is too weak";
+                                    binding.etPassword.setError(errorMessage);
+                                    binding.etPassword.requestFocus();
+                                } else if (e.getMessage().contains("network")) {
+                                    errorMessage = "Network error. Please check your connection";
+                                } else if (e.getMessage().contains("Username is already taken")) {
+                                    binding.etUsername.setError(e.getMessage());
+                                    binding.etUsername.requestFocus();
+                                    errorMessage = e.getMessage();
+                                } else {
+                                    errorMessage = e.getMessage();
+                                }
+                            }
+                            Toast.makeText(SignupActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
+        // If they already have an account, clicking Login just closes this screen
         binding.tvLogin.setOnClickListener(v -> {
             finish();
         });
 
-        // Real-time username validation
+        // This cool feature checks if the username is taken AS they are typing it!
         binding.etUsername.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus && !TextUtils.isEmpty(binding.etUsername.getText().toString())) {
                 String username = binding.etUsername.getText().toString().trim();
@@ -186,6 +194,7 @@ public class SignupActivity extends AppCompatActivity {
             binding.progressBar.setVisibility(View.VISIBLE);
             binding.btnGoogleSignIn.setEnabled(false);
             Intent signInIntent = authManager.getGoogleSignInIntent();
+
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
     }
@@ -225,6 +234,7 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
+    // Wipes all the red error messages on the screen
     private void clearErrors() {
         binding.etUsername.setError(null);
         binding.etName.setError(null);
@@ -233,8 +243,11 @@ public class SignupActivity extends AppCompatActivity {
         binding.etConfirmPassword.setError(null);
     }
 
+    // A helper method to switch to the Main application screen
     private void navigateToMain() {
         Intent intent = new Intent(this, MainActivity.class);
+        // We clear the history so they can't press back to go to the Signup screen
+        // again
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

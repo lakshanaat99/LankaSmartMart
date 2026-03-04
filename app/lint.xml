@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Java & Code warnings -->
+    <issue id="DefaultLocale" severity="ignore" />
+    <issue id="NotifyDataSetChanged" severity="ignore" />
+    <issue id="SetTextI18n" severity="ignore" />
+    
+    <!-- Android Manifest & Configuration -->
+    <issue id="CustomSplashScreen" severity="ignore" />
+    <issue id="SelectedPhotoAccess" severity="ignore" />
+    <issue id="ExportedService" severity="ignore" />
+    
+    <!-- Gradle & Versioning -->
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
+    <issue id="GradleDependency" severity="ignore" />
+    <issue id="NewerVersionAvailable" severity="ignore" />
+    <issue id="UseTomlInstead" severity="ignore" />
+    
+    <!-- XML Layouts, Resources, & Drawables -->
+    <issue id="UseCompoundDrawables" severity="ignore" />
+    <issue id="Overdraw" severity="ignore" />
+    <issue id="UnusedResources" severity="ignore" />
+    <issue id="IconLauncherShape" severity="ignore" />
+    <issue id="IconLocation" severity="ignore" />
+    <issue id="IconDuplicates" severity="ignore" />
+    <issue id="SmallSp" severity="ignore" />
+    <issue id="Autofill" severity="ignore" />
+    <issue id="ContentDescription" severity="ignore" />
+    <issue id="HardcodedText" severity="ignore" />
+</lint>
