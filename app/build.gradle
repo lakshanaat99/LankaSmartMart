@@ -48,6 +48,7 @@ dependencies {
     implementation libs.firebase.firestore
     implementation libs.firebase.auth
     implementation libs.firebase.storage
+    implementation 'com.google.firebase:firebase-messaging'
     
     // Google Sign-In
     implementation 'com.google.android.gms:play-services-auth:21.2.0'

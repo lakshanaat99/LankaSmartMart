@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.lankasmartmart.auth.AuthManager;
 import com.example.lankasmartmart.databinding.ActivityLoginBinding;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
+import android.util.Log;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -23,6 +25,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         authManager = AuthManager.getInstance(this);
+
+        // Fetch and log FCM token just in case user is stuck on Login screen
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e("FCM_TOKEN", "Fetching FCM registration token failed in LoginActivity",
+                                task.getException());
+                        return;
+                    }
+                    String token = task.getResult();
+                    Log.e("FCM_TOKEN", "FCM Registration Token: " + token);
+                    System.out.println("========== FCM Registration Token: " + token + " ==========");
+                });
 
         // Check if user is already logged in
         if (authManager.isUserLoggedIn()) {
@@ -112,13 +127,13 @@ public class LoginActivity extends AppCompatActivity {
                 binding.etEmail.requestFocus();
                 return;
             }
-            
+
             if (!authManager.isValidEmail(email)) {
                 binding.etEmail.setError("Please enter a valid email address");
                 binding.etEmail.requestFocus();
                 return;
             }
-            
+
             resetPassword(email);
         });
 
@@ -178,9 +193,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 binding.progressBar.setVisibility(View.GONE);
-                Toast.makeText(LoginActivity.this, 
-                    "Password reset email sent. Please check your inbox.", 
-                    Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,
+                        "Password reset email sent. Please check your inbox.",
+                        Toast.LENGTH_LONG).show();
             }
 
             @Override
